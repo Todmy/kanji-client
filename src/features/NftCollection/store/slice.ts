@@ -1,15 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { NftCollection } from '../dto';
 
 type State = {
-  data: [];
-  selected: string | null;
+  data: NftCollection[];
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: State = {
   data: [],
-  selected: null,
   isLoading: false,
   error: null,
 }
@@ -27,12 +26,18 @@ export const slice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    selectNftCollection: (state, action) => {
-      state.selected = action.payload;
-    }
+    updateCollection: (state, action) => {
+      const { id, data } = action.payload;
+      const index = state.data.findIndex((item: NftCollection) => item._id === id);
+      if (index !== -1) {
+        state.data[index] = data;
+      } else {
+        state.data.push(data);
+      }
+    },
   },
 });
 
-export const { selectNftCollection, setCollection, setLoading, setError } = slice.actions;
+export const { setCollection, setLoading, setError, updateCollection } = slice.actions;
 
 export default slice.reducer;

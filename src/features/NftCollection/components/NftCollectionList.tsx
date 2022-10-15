@@ -2,13 +2,14 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from 'app/reduxHooks';
 
 import { NftCollection } from '../dto/NftCollection.dto';
-import { fetchNftCollections } from '../store';
+import { fetchNftCollections, getAllActiveNftCollections } from '../store';
+import { NftCollectionListItem } from './NftCollectionListItem';
 
 export interface INftCollectionListProps {}
 
 export const NftCollectionList: React.FC<INftCollectionListProps> = (props) => {
   const dispatch = useAppDispatch()
-  const collections: NftCollection[] = useAppSelector((store) => store.nftCollection.data)
+  const collections: NftCollection[] = useAppSelector(getAllActiveNftCollections)
 
   React.useEffect(() => {
     dispatch(fetchNftCollections());
@@ -18,7 +19,10 @@ export const NftCollectionList: React.FC<INftCollectionListProps> = (props) => {
     { 
       collections
         .map((collection: NftCollection, index: number) => (
-          <div key={collection._id}>{index + 1}) {collection.collectionName}</div>
+          <NftCollectionListItem 
+            key={collection._id}
+            item={collection}
+          />
         ))
     }
   </div>;
