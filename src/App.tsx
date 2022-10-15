@@ -1,18 +1,21 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { NftCollectionList } from './pages/NftCollectionList';
-import { NftCollectionItem } from './pages/NftCollectionItem';
+import { Provider } from 'react-redux';
+import { NftCollectionListPage, NftCollectionItemPage } from 'pages';
+import store from 'app/store';
 
 export interface IAppProps {}
 
 export const App: React.FC<IAppProps> = (props) => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<NftCollectionList />} />
-        <Route path="/:collectionId" element={<NftCollectionItem />} />
-        <Route path="/new-collection" element={<NftCollectionItem />} />
-      </Routes>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/" element={<NftCollectionListPage />} />
+          <Route path="/:collectionId" element={<NftCollectionItemPage />} />
+          <Route path="/new-collection" element={<NftCollectionItemPage />} />
+        </Routes>
+      </Provider>
     </BrowserRouter>
   );
 }
