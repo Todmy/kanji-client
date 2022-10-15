@@ -1,26 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { NftCollectionList } from './pages/NftCollectionList';
+import { NftCollectionItem } from './pages/NftCollectionItem';
 
-function App() {
+export interface IAppProps {}
+
+export const App: React.FC<IAppProps> = (props) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<NftCollectionList />} />
+        <Route path="/:collectionId" element={<NftCollectionItem />} />
+        <Route path="/new-collection" element={<NftCollectionItem />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
