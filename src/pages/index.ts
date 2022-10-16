@@ -1,2 +1,2 @@
-export { NftCollectionItemPage } from "./NftCollectionItemPage";
-export { NftCollectionListPage } from "./NftCollectionListPage";
+export { NftCollectionPage } from './NftCollectionPage';
+export { NftCollectionListPage } from './NftCollectionListPage';

@@ -14,7 +14,7 @@ const initialState: State = {
 }
 
 export const slice = createSlice({
-  name: "nftCollection",
+  name: 'nftCollection',
   initialState,
   reducers: {
     setCollection: (state, action) => {

@@ -1,0 +1,1 @@
+export { NftCollectionForm } from './NftCollectionForm';
