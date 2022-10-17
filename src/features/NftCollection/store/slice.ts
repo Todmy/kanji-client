@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NftCollectionDTO } from '../interfaces';
+import { NftCollectionDO } from '../interfaces';
 
 type State = {
-  data: NftCollectionDTO[];
+  data: NftCollectionDO[];
   isLoading: boolean;
   error: string | null;
 }
@@ -28,16 +28,19 @@ export const slice = createSlice({
     },
     updateCollection: (state, action) => {
       const { id, data } = action.payload;
-      const index = state.data.findIndex((item: NftCollectionDTO) => item._id === id);
+      const index = state.data.findIndex((item: NftCollectionDO) => item._id === id);
       if (index !== -1) {
         state.data[index] = data;
       } else {
         state.data.push(data);
       }
     },
+    addCollection: (state, action) => {
+      state.data.push(action.payload);
+    },
   },
 });
 
-export const { setCollectionSet, setLoading, setError, updateCollection } = slice.actions;
+export const { setCollectionSet, setLoading, setError, updateCollection, addCollection } = slice.actions;
 
 export default slice.reducer;

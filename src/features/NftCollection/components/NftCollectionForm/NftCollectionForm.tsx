@@ -9,13 +9,15 @@ import { FileUpload } from 'primereact/fileupload';
 import { DataInputWrapper } from 'components';
 import { useAppDispatch, useAppSelector } from 'app/reduxHooks';
 
-import { createNftCollection, updateNftCollection, getLoadingState } from '../../store';
+import { createNftCollection, updateNftCollection, getLoadingState, getCollectionById } from '../../store';
 import { CollectionMaxAmount } from './CollectionMaxAmount';
 import { useFormState } from './useFormState';
 import styles from './NftCollectionForm.module.css';
 import { NftCollectionBlockchain, NftCollectionDataHost } from '../../enums';
+import { NftCollectionDO } from '../../interfaces';
 
 export interface INftCollectionFormProps {
+  collectionId?: string;
   className?: string;
   onSuccessfulSubmit: () => void;
 }
@@ -54,15 +56,26 @@ export const NftCollectionForm: React.FC<INftCollectionFormProps> = (props) => {
   const [collectionPicture, setCollectionPicture] = React.useState<string | undefined>(undefined);
   const dispatch = useAppDispatch()
   const isLoading: boolean = useAppSelector(getLoadingState);
+  // optional activeCollection
+  const activeCollection: NftCollectionDO | undefined = useAppSelector(getCollectionById(props.collectionId));
 
   const {
     formik,
     getFormErrorMessage,
   } = useFormState({
+    initialData: activeCollection,
     onSubmit: async (data) => {
-      
-      await dispatch(createNftCollection(data));
-      props.onSuccessfulSubmit();
+      try {
+        if (props.collectionId) {
+          var a = await dispatch(updateNftCollection(props.collectionId, data));
+          console.log(a);
+        } else {
+          await dispatch(createNftCollection(data));
+        }
+        props.onSuccessfulSubmit();
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
 

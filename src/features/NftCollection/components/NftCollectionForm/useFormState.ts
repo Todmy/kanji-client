@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import Web3 from 'web3';
 
 import { NftCollectionDO } from '../../interfaces';
 
@@ -7,6 +8,47 @@ interface IFormHookProps {
   initialData?: NftCollectionFormValues;
   onSubmit?: (values: NftCollectionDO) => void;
 }
+
+type AllFieldsTypes = NftCollectionFormValues[keyof NftCollectionFormValues];
+type FieldValidator = (value: AllFieldsTypes) => string | undefined;
+type FormikValidators = Partial<Record<keyof NftCollectionFormValues, FieldValidator>>;
+type FormikErrors = Partial<Record<keyof NftCollectionFormValues, string>>;
+
+const fieldErrorMap: FormikValidators = {
+  blockchain: (value) => (!value ? 'Blockchain is required' : undefined),
+  dataHost: (value) => (!value ? 'Data host is required' : undefined),
+  owner: (value) => {
+    const typedValue = value as string;
+    if (!typedValue) return 'Owner is required';
+    if (!Web3.utils.isAddress(typedValue)) return 'Invalid Eth address';
+    return undefined;
+  },
+  collectionName: (value) => {
+    const typedValue = value as string;
+    if (!typedValue) return 'Collection name is required';
+    if (typedValue.length < 3 || typedValue.length > 128) return 'Collection name should contain 3-128 characters';
+    return undefined;
+  },
+  symbol: (value) => {
+    const typedValue = value as string;
+    if (!typedValue) return 'Symbol is required';
+    if (typedValue.length < 1 || typedValue.length > 64) return 'Symbol should contain 1-64 characters';
+    return undefined;
+  },
+  amount: (value) => {
+    const typedValue = value as number;
+    if (!typedValue) return 'Amount is required';
+    if (typedValue > 10000) return 'Amount should be less than 10000';
+    return undefined;
+  },
+  description: (value) => {
+    const typedValue = value as string;
+    if (!typedValue) return 'Description is required';
+    if (typedValue.length < 16 || typedValue.length > 1024) return 'Description should contain 16-1024 characters';
+    return undefined; 
+  },
+};
+
 export const useFormState = (props: IFormHookProps = {}) => {
   const { initialData, onSubmit = () => {} } = props;
   const initialValues: NftCollectionFormValues = initialData || {
@@ -22,24 +64,13 @@ export const useFormState = (props: IFormHookProps = {}) => {
   const formik = useFormik<NftCollectionFormValues>({
     initialValues,
     validate: (data) => {
-      type FormikErrors = Partial<Record<keyof NftCollectionFormValues, string>>;
       let errors: FormikErrors = {};
-      const fieldErrorMap: { required: FormikErrors } = {
-        required: {
-          blockchain: 'Blockchain is required',
-          dataHost: 'Data destination is required',
-          owner: 'Owner is required',
-          collectionName: 'Collection name is required',
-          symbol: 'Symbol is required',
-          amount: 'Amount is required',
-          description: 'Description is required',
-        }
-      };
       
-      Object.entries(fieldErrorMap.required).forEach(([key, value]) => {
+      Object.entries(fieldErrorMap).forEach(([key, validator]) => {
         const fieldData = data[key as keyof NftCollectionFormValues];
-        if (!fieldData) {
-          errors[key as keyof NftCollectionFormValues] = value;
+        const error = validator(fieldData);
+        if (error) {
+          errors[key as keyof NftCollectionFormValues] = error;
         }
       });
 
@@ -55,7 +86,6 @@ export const useFormState = (props: IFormHookProps = {}) => {
         symbol: data.symbol!,
         amount: data.amount!,
         description: data.description!,
-        set: []
       };
       onSubmit(nftCollection);
     },

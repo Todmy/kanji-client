@@ -1,4 +1,4 @@
-import { setCollectionSet, setLoading, setError, updateCollection } from './slice';
+import { setCollectionSet, setLoading, setError, updateCollection, addCollection } from './slice';
 import { NftCollectionDO } from '../interfaces';
 import { AppThunk } from 'app/store.d';
 import api from 'app/api';
@@ -25,30 +25,37 @@ export const getNftCollection = (id: string): AppThunk => async (dispatch) => {
     const response = await api.get(`/nft-collection/${id}`);
     dispatch(updateCollection({ id, data: response.data }));
   } catch (error) {
+    let errorMessage;
     if (error instanceof Error) {
-      dispatch(setError(error.message));
+      errorMessage = error.message;
     } else {
-      dispatch(setError('An unknown error occured.'));
+      errorMessage = 'An unknown error occured.';
     }
+    dispatch(setError(errorMessage));
+    throw new Error(errorMessage);
   } finally {
     dispatch(setLoading(false));
   }
 }
 
-export const createNftCollection = (data: NftCollectionDO): AppThunk => async (dispatch, getState) => {
+export const createNftCollection = (data: NftCollectionDO): AppThunk => async (dispatch) => {
   dispatch(setLoading(true));
-  const items = getState().nftCollection.data;
   try {
+    if (!data.picture) {
+      delete data.picture;
+    }
     const formData = jsonToFormData(data);
     const response = await api.post(`/nft-collection`, formData);
-    items.push(response.data);
-    dispatch(setCollectionSet(response.data));
+    dispatch(addCollection(response.data));
   } catch (error) {
+    let errorMessage;
     if (error instanceof Error) {
-      dispatch(setError(error.message));
+      errorMessage = error.message;
     } else {
-      dispatch(setError('An unknown error occured.'));
+      errorMessage = 'An unknown error occured.';
     }
+    dispatch(setError(errorMessage));
+    throw new Error(errorMessage);
   } finally {
     dispatch(setLoading(false));
   }
@@ -57,15 +64,21 @@ export const createNftCollection = (data: NftCollectionDO): AppThunk => async (d
 export const updateNftCollection = (id: string, data: NftCollectionDO): AppThunk => async (dispatch) => {
   dispatch(setLoading(true));
   try {
+    if (typeof data.picture === 'string') {
+      delete data.picture;
+    }
     const formData = jsonToFormData(data);
     const response = await api.put(`/nft-collection/${id}`, formData);
     dispatch(updateCollection({ id, data: response.data }));
   } catch (error) {
+    let errorMessage;
     if (error instanceof Error) {
-      dispatch(setError(error.message));
+      errorMessage = error.message;
     } else {
-      dispatch(setError('An unknown error occured.'));
+      errorMessage = 'An unknown error occured.';
     }
+    dispatch(setError(errorMessage));
+    throw new Error(errorMessage);
   } finally {
     dispatch(setLoading(false));
   }
@@ -77,11 +90,14 @@ export const deleteNftCollection = (id: string): AppThunk => async (dispatch) =>
     const response = await api.delete(`/nft-collection/${id}`);
     dispatch(updateCollection({ id, data: response.data }));
   } catch (error) {
+    let errorMessage;
     if (error instanceof Error) {
-      dispatch(setError(error.message));
+      errorMessage = error.message;
     } else {
-      dispatch(setError('An unknown error occured.'));
+      errorMessage = 'An unknown error occured.';
     }
+    dispatch(setError(errorMessage));
+    throw new Error(errorMessage);
   } finally {
     dispatch(setLoading(false));
   }

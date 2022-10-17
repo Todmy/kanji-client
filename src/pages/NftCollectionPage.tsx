@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { NftCollectionForm } from 'features/NftCollection';
 
@@ -8,6 +8,8 @@ export interface INftCollectionPageProps {}
 
 export const NftCollectionPage: React.FC<INftCollectionPageProps> = (props) => {
   const navigate = useNavigate();
+  const { collectionId } = useParams();
+
   return <div>
     <div className="">
       <div className="">
@@ -16,6 +18,7 @@ export const NftCollectionPage: React.FC<INftCollectionPageProps> = (props) => {
       </div>
     </div>
     <NftCollectionForm
+      collectionId={collectionId}
       className={styles.form}
       onSuccessfulSubmit={() => navigate('/')}
     />

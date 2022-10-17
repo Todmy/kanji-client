@@ -1,20 +1,31 @@
 import React from 'react';
-import { NftCollectionDTO } from '../../interfaces';
+import { NftCollectionDO } from '../../interfaces';
 import styles from './NftCollectionListItem.module.css';
 import { Button } from 'primereact/button';
 
 export interface INftCollectionListItemProps {
-  item: NftCollectionDTO;
+  item: NftCollectionDO;
   onRemove: (id: string) => void;
   onClick: (id: string) => void;
 }
 
+const PicturePlaceholder = () => (
+  <div className={styles.picturePlaceholder}>
+    <i className="pi pi-image" />
+  </div>
+);
+
 export const NftCollectionListItem: React.FC<INftCollectionListItemProps> = (props) => {
   const { item, onRemove, onClick } = props;
+  const picture = item.picture as string | undefined;
 
-  return <div className={styles.listItem} onClick={() => onClick(item._id)}>
+  return <div className={styles.listItem} onClick={() => onClick(item._id!)}>
     <div className={styles.pictureWrapper}>
-      <img src={item.picture} className={styles.itemPicture} alt={item.collectionName} />
+      {
+        picture 
+          ? <img src={picture} className={styles.itemPicture} alt={item.collectionName} />
+          : <PicturePlaceholder />
+      }
     </div>
 
     <div className={styles.itemMainDetails}>
@@ -25,7 +36,7 @@ export const NftCollectionListItem: React.FC<INftCollectionListItemProps> = (pro
     <Button 
       className="p-button-raised p-button-danger p-button-text"
       onClick={(event) => {
-        onRemove(item._id);
+        onRemove(item._id!);
         event.stopPropagation();
       }}
       icon="pi pi-trash"

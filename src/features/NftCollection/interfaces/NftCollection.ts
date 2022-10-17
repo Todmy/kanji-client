@@ -17,9 +17,10 @@ export interface NftCollectionDTO {
   deletedAt?: Date;
 }
 
-type optionalProps = '_id' | 'picture' | 'createdAt';
+type optionalProps = '_id' | 'picture' | 'createdAt' | 'set';
 export interface NftCollectionDO extends Omit<NftCollectionDTO, optionalProps> {
   _id?: string;
   picture?: string | File;
   createdAt?: Date;
+  set?: Nft[];
 }

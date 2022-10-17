@@ -4,7 +4,6 @@
   grid-gap: 1rem;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
-  align-items: flex-end;
   grid-template-areas: 
     "pictureBlock"
     "blockchain"
@@ -115,5 +114,9 @@
       "owner ownerDetails ."
       "description description ."
       "submit . .";
+  }
+
+  .moreOptions{
+    top: 27px;
   }
 }

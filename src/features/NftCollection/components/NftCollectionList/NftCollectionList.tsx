@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from 'app/reduxHooks';
 
-import { NftCollectionDTO } from '../../interfaces';
+import { NftCollectionDO } from '../../interfaces';
 import { fetchNftCollections, getAllActiveNftCollections, deleteNftCollection } from '../../store';
 import { NftCollectionListItem } from './NftCollectionListItem';
 
@@ -13,7 +13,7 @@ export interface INftCollectionListProps {
 
 export const NftCollectionList: React.FC<INftCollectionListProps> = (props) => {
   const dispatch = useAppDispatch()
-  const collections: NftCollectionDTO[] = useAppSelector(getAllActiveNftCollections)
+  const collections: NftCollectionDO[] = useAppSelector(getAllActiveNftCollections)
 
   React.useEffect(() => {
     dispatch(fetchNftCollections());
@@ -22,12 +22,12 @@ export const NftCollectionList: React.FC<INftCollectionListProps> = (props) => {
   return <div className={styles.listWrapper}>
     { 
       collections
-        .map((collection: NftCollectionDTO, index: number) => (
+        .map((collection: NftCollectionDO, index: number) => (
           <NftCollectionListItem 
             key={collection._id}
             item={collection}
             onRemove={(id: string) => dispatch(deleteNftCollection(id))}
-            onClick={() => props.onItemClick(collection._id)}
+            onClick={() => props.onItemClick(collection._id!)}
           />
         ))
     }
