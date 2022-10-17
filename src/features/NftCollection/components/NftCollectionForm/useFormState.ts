@@ -1,10 +1,14 @@
 import { useFormik } from 'formik';
 
-import { NftCollection } from '../../dto';
+import { NftCollectionDO } from '../../interfaces';
 
-interface NftCollectionFormValues extends Partial<NftCollection> {}
-
-export const useFormState = (initialData?: NftCollectionFormValues) => {
+interface NftCollectionFormValues extends Partial<NftCollectionDO> {}
+interface IFormHookProps {
+  initialData?: NftCollectionFormValues;
+  onSubmit?: (values: NftCollectionDO) => void;
+}
+export const useFormState = (props: IFormHookProps = {}) => {
+  const { initialData, onSubmit = () => {} } = props;
   const initialValues: NftCollectionFormValues = initialData || {
     blockchain: undefined,
     dataHost: undefined,
@@ -42,7 +46,18 @@ export const useFormState = (initialData?: NftCollectionFormValues) => {
       return errors;
     },
     onSubmit: (data) => {
-      console.log(data);
+      const nftCollection: NftCollectionDO = {
+        picture: data.picture,
+        blockchain: data.blockchain!,
+        dataHost: data.dataHost!,
+        owner: data.owner!,
+        collectionName: data.collectionName!,
+        symbol: data.symbol!,
+        amount: data.amount!,
+        description: data.description!,
+        set: []
+      };
+      onSubmit(nftCollection);
     },
   });
 

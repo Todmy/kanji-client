@@ -1,6 +1,8 @@
 import { RootState } from 'app/store.d';
-import { NftCollection } from '../dto';
+import { NftCollectionDTO } from '../interfaces';
 
 export const getAllActiveNftCollections = (store: RootState) => store.nftCollection.data
-  .filter((item: NftCollection) => !item.deletedAt)
-  .sort((a: NftCollection, b: NftCollection) => a.createdAt > b.createdAt ? -1 : 1);
+  .filter((item: NftCollectionDTO) => !item.deletedAt)
+  .sort((a: NftCollectionDTO, b: NftCollectionDTO) => a.createdAt > b.createdAt ? -1 : 1);
+
+export const getLoadingState = (store: RootState) => store.nftCollection.isLoading;

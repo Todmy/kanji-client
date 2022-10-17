@@ -1,10 +1,10 @@
 import React from 'react';
-import { NftCollection } from '../../dto';
+import { NftCollectionDTO } from '../../interfaces';
 import styles from './NftCollectionListItem.module.css';
 import { Button } from 'primereact/button';
 
 export interface INftCollectionListItemProps {
-  item: NftCollection;
+  item: NftCollectionDTO;
   onRemove: (id: string) => void;
   onClick: (id: string) => void;
 }
@@ -24,7 +24,10 @@ export const NftCollectionListItem: React.FC<INftCollectionListItemProps> = (pro
 
     <Button 
       className="p-button-raised p-button-danger p-button-text"
-      onClick={() => onRemove(item._id)}
+      onClick={(event) => {
+        onRemove(item._id);
+        event.stopPropagation();
+      }}
       icon="pi pi-trash"
     />
   </div>;

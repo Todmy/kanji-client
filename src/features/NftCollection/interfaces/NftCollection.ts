@@ -1,7 +1,7 @@
 import { NftCollectionDataHost, NftCollectionBlockchain } from '../enums';
-import { Nft } from './Nft.dto';
+import { Nft } from './Nft';
 
-export interface NftCollection {
+export interface NftCollectionDTO {
   _id: string;
   picture: string;
   blockchain: NftCollectionBlockchain;
@@ -15,4 +15,11 @@ export interface NftCollection {
   modifiedAt?: Date;
   createdAt: Date;
   deletedAt?: Date;
+}
+
+type optionalProps = '_id' | 'picture' | 'createdAt';
+export interface NftCollectionDO extends Omit<NftCollectionDTO, optionalProps> {
+  _id?: string;
+  picture?: string | File;
+  createdAt?: Date;
 }

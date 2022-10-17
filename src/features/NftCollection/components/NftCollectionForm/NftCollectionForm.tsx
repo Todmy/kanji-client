@@ -7,6 +7,9 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from 'primereact/fileupload';
 
 import { DataInputWrapper } from 'components';
+import { useAppDispatch, useAppSelector } from 'app/reduxHooks';
+
+import { createNftCollection, updateNftCollection, getLoadingState } from '../../store';
 import { CollectionMaxAmount } from './CollectionMaxAmount';
 import { useFormState } from './useFormState';
 import styles from './NftCollectionForm.module.css';
@@ -14,7 +17,18 @@ import { NftCollectionBlockchain, NftCollectionDataHost } from '../../enums';
 
 export interface INftCollectionFormProps {
   className?: string;
+  onSuccessfulSubmit: () => void;
 }
+
+const blockchainList = [
+  { label: 'Ethereum', value: NftCollectionBlockchain.ETHEREUM },
+  { label: 'Polygon', value: NftCollectionBlockchain.POLYGON },
+];
+
+const dataHostList = [
+  { label: 'IPFS', value: NftCollectionDataHost.IPFS },
+  { label: 'Arweave', value: NftCollectionDataHost.ARWEAVE },
+];
 
 const getProperPicture = async (picture: string | undefined | File) => {
   return new Promise<string | undefined>((resolve, reject) => {
@@ -38,10 +52,19 @@ const getProperPicture = async (picture: string | undefined | File) => {
 
 export const NftCollectionForm: React.FC<INftCollectionFormProps> = (props) => {
   const [collectionPicture, setCollectionPicture] = React.useState<string | undefined>(undefined);
+  const dispatch = useAppDispatch()
+  const isLoading: boolean = useAppSelector(getLoadingState);
+
   const {
     formik,
     getFormErrorMessage,
-  } = useFormState();
+  } = useFormState({
+    onSubmit: async (data) => {
+      
+      await dispatch(createNftCollection(data));
+      props.onSuccessfulSubmit();
+    }
+  });
 
   React.useEffect(() => {
     getProperPicture(formik.values.picture).then(setCollectionPicture);
@@ -50,16 +73,6 @@ export const NftCollectionForm: React.FC<INftCollectionFormProps> = (props) => {
   const onFileSelect = (event: any) => {
     formik.setFieldValue('picture', event.files[0]);
   };
-
-  const blockchainList = [
-    { label: 'Ethereum', value: NftCollectionBlockchain.ETHEREUM },
-    { label: 'Polygon', value: NftCollectionBlockchain.POLYGON },
-  ];
-
-  const dataHostList = [
-    { label: 'IPFS', value: NftCollectionDataHost.IPFS },
-    { label: 'Arweave', value: NftCollectionDataHost.ARWEAVE },
-  ];
 
   return <form 
     className={`${props.className} ${styles.form}`}
@@ -213,6 +226,7 @@ export const NftCollectionForm: React.FC<INftCollectionFormProps> = (props) => {
       <Button
         label="Continue"
         type="submit"
+        loading={isLoading}
         disabled={!formik.isValid}
       />
     </div>
