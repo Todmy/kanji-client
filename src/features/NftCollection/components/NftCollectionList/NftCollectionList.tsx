@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from 'app/reduxHooks';
 
-import { NftCollection } from '../dto/NftCollection.dto';
-import { fetchNftCollections, getAllActiveNftCollections, deleteNftCollection } from '../store';
+import { NftCollection } from '../../dto';
+import { fetchNftCollections, getAllActiveNftCollections, deleteNftCollection } from '../../store';
 import { NftCollectionListItem } from './NftCollectionListItem';
 
 import styles from './NftCollectionList.module.css';

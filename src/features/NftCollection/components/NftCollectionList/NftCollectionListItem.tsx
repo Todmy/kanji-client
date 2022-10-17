@@ -1,5 +1,5 @@
 import React from 'react';
-import { NftCollection } from '../dto';
+import { NftCollection } from '../../dto';
 import styles from './NftCollectionListItem.module.css';
 import { Button } from 'primereact/button';
 
