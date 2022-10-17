@@ -18,6 +18,9 @@ export const CollectionMaxAmount: React.FC<ICollectionMaxAmountProps> = (props) 
       {...restProps}
       className={isInvalid ? 'p-invalid' : ''}
     />
-    <span className="p-inputgroup-addon">{addon}</span>
+    <span
+      className="p-inputgroup-addon"
+      style={{ minWidth: "120px" }}
+    >{addon}</span>
   </div>
 };

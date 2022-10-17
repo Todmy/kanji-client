@@ -1,0 +1,119 @@
+/* grid */
+.form {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  align-items: flex-end;
+  grid-template-areas: 
+    "pictureBlock"
+    "blockchain"
+    "dataHost"
+    "collectionName"
+    "collectionSymbol"
+    "amount"
+    "owner"
+    "ownerDetails"
+    "description"
+    "submit";
+}
+
+.pictureBlock {
+  grid-area: pictureBlock;
+}
+
+.blockchain {
+  grid-area: blockchain;
+}
+
+.dataHost {
+  grid-area: dataHost;
+}
+
+.collectionName {
+  grid-area: collectionName;
+}
+
+.description {
+  grid-area: description;
+}
+
+.amount {
+  grid-area: amount;
+}
+
+.owner {
+  grid-area: owner;
+}
+
+.symbol {
+  grid-area: collectionSymbol;
+}
+
+.ownerDetails {
+  grid-area: ownerDetails;
+}
+
+.footer {
+  grid-area: submit;
+}
+
+/* picture block */
+.pictureBlock {
+  display: flex;
+  align-items: center;
+}
+
+.pictureWrapper {
+  background-color: var(--surface-300);
+  border-radius: 0.5rem;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+
+.picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pictureUpload {
+  flex: 1;
+  padding-left: 0.5rem;
+}
+
+.pictureIcon {
+  color: var(--surface-500);
+  font-size: 1.3rem !important;
+}
+
+.uploadBtn {
+  margin-top: 0.5rem !important;
+  color: var(--surface-500) !important;
+}
+
+.uploadBtnIcon {
+  display: none;
+}
+
+.moreOptions {
+  color: var(--surface-500) !important;
+}
+
+@media screen and (min-width: 768px) {
+  .form {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+      "pictureBlock pictureBlock ."
+      "blockchain dataHost ."
+      "collectionName collectionSymbol amount"
+      "owner ownerDetails ."
+      "description description ."
+      "submit . .";
+  }
+}
